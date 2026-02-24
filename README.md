@@ -22,6 +22,13 @@ bash build.sh
 
 The script downloads dependencies automatically (game + template) if missing, copies the ROM, and assembles the package into `build/Sonic3AIRPortable/`.
 
+You can also run the steps separately:
+
+```bash
+bash scripts/fetch.sh     # Download dependencies + ROM
+bash scripts/package.sh   # Assemble the package
+```
+
 ### 3. Run
 
 Launch `build/Sonic3AIRPortable/Sonic3AIRPortable.exe` on Windows.
@@ -37,7 +44,13 @@ Launch `build/Sonic3AIRPortable/Sonic3AIRPortable.exe` on Windows.
 ## Prerequisites
 
 - Bash (WSL, Git Bash, or similar)
-- `curl`, `unzip`, `rsync`
+- `curl`, `unzip`, `rsync`, `sed`, `grep`
+
+To check and install missing packages:
+
+```bash
+bash scripts/setup.sh
+```
 
 ## Documentation
 

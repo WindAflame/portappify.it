@@ -15,12 +15,15 @@ No registry keys are used. The game's `config.json` uses `RomPath=""` which auto
 
 ```text
 .
-├── build.sh                 # Build script
+├── build.sh                 # Orchestrator (prerequisites + build)
 ├── .env.example             # Build configuration template
-├── README.md
+├── scripts/
+│   ├── config.sh            # Shared variables (loaded by other scripts)
+│   ├── fetch.sh             # Download dependencies + ROM
+│   └── package.sh           # Assemble the package
 ├── docs/
 │   └── architecture.md      # This file
-├── resources/               # Downloaded automatically by build.sh
+├── resources/               # Downloaded automatically
 │   ├── Sonic 3 A.I.R/      # Game files (without ROM)
 │   └── PortableApps.com_Application_Template_3.9.0/
 ├── src/                     # Package source files
@@ -37,6 +40,18 @@ No registry keys are used. The game's `config.json` uses `RomPath=""` which auto
     └── Sonic3AIRPortable/   # Ready-to-use portable package
 ```
 
+## Scripts
+
+| Script                     | Role                                                              |
+| -------------------------- | ----------------------------------------------------------------- |
+| `build.sh`                 | Orchestrator — runs fetch then package                            |
+| `scripts/setup.sh`         | Checks and installs required system packages                      |
+| `scripts/config.sh`        | Shared configuration — loads `.env`, defines all paths and URLs   |
+| `scripts/fetch.sh`         | Downloads template + game if missing, copies ROM from `ROM_PATH`  |
+| `scripts/package.sh`       | Assembles the package from `resources/` and `src/` into `build/`  |
+
+`config.sh` is sourced (not executed) by the other two scripts. All variables are defined there.
+
 ## Key files
 
 | File                                              | Role                                                        |
@@ -44,7 +59,7 @@ No registry keys are used. The game's `config.json` uses `RomPath=""` which auto
 | `.env`                                            | Build configuration (ROM path, versions)                    |
 | `src/App/AppInfo/Launcher/Sonic3AIRPortable.ini`  | Portability mechanism — directory moves, cleanup             |
 | `src/App/AppInfo/appinfo.ini`                     | Package metadata (name, category, version, license)         |
-| `resources/Sonic 3 A.I.R/data/metadata.json`     | Game version source (auto-read at build time)               |
+| `resources/Sonic 3 A.I.R/data/metadata.json`      | Game version source (auto-read at build time)               |
 | `build/Sonic3AIRPortable/App/AppInfo/appinfo.ini` | Built package version (patched from game metadata)          |
 
 ## Version management
@@ -74,21 +89,24 @@ grep 'Version=' build/Sonic3AIRPortable/App/AppInfo/appinfo.ini
 
 ## Build steps detail
 
-`build.sh` performs the following:
+### `scripts/fetch.sh`
 
-1. Load `.env` configuration (or use defaults)
-2. Download the PortableApps.com template from SourceForge if missing
-3. Download Sonic 3 A.I.R. from GitHub releases if missing
-4. Copy ROM from `ROM_PATH` if set, or warn if missing
-5. Read game version from `data/metadata.json`
-6. Clean and create `build/Sonic3AIRPortable/`
-7. Copy launcher `.exe` (renamed from template)
-8. Copy game files (excluding `bonus/` — ~23 MB of dev tools not needed to play)
-9. Copy and patch `appinfo.ini` with game version
-10. Copy template icons (placeholders)
-11. Create `DefaultData/Sonic3AIR/` skeleton for first launch
-12. Copy help page and Other/ assets
-13. Print summary with versions, ROM status, and size
+1. Download the PortableApps.com template from SourceForge if missing
+2. Download Sonic 3 A.I.R. from GitHub releases if missing
+3. Copy ROM from `ROM_PATH` if set, or warn if missing
+4. Validate that all required directories exist
+
+### `scripts/package.sh`
+
+1. Read game version from `data/metadata.json`
+2. Clean and create `build/Sonic3AIRPortable/`
+3. Copy launcher `.exe` (renamed from template)
+4. Copy game files (excluding `bonus/` — ~23 MB of dev tools not needed to play)
+5. Copy and patch `appinfo.ini` with game version
+6. Copy template icons (placeholders)
+7. Create `DefaultData/Sonic3AIR/` skeleton for first launch
+8. Copy help page and Other/ assets
+9. Print summary with versions, ROM status, and size
 
 ## ROM
 
