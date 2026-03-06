@@ -60,7 +60,7 @@ cp "$TEMPLATE/App/AppInfo/appicon_128.png" "$BUILD/App/AppInfo/appicon_128.png"
 cp "$TEMPLATE/App/Readme.txt" "$BUILD/App/Readme.txt"
 
 # ── DefaultData skeleton ─────────────────────────────────────────────────
-mkdir -p "$BUILD/App/DefaultData/Sonic3AIR"
+mkdir -p "$BUILD/App/DefaultData/UserData"
 
 # ── Help page ────────────────────────────────────────────────────────────
 cp "$SRC/help.html" "$BUILD/help.html"
