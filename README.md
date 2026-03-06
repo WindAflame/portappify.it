@@ -25,8 +25,8 @@ The script downloads dependencies automatically (game + template) if missing, co
 You can also run the steps separately:
 
 ```bash
-bash scripts/fetch.sh     # Download dependencies + ROM
-bash scripts/package.sh   # Assemble the package
+bash src/scripts/fetch.sh     # Download dependencies + ROM
+bash src/scripts/package.sh   # Assemble the package
 ```
 
 ### 3. Run
@@ -49,7 +49,7 @@ Launch `build/Sonic3AIRPortable/Sonic3AIRPortable.exe` on Windows.
 To check and install missing packages:
 
 ```bash
-bash scripts/setup.sh
+bash src/scripts/setup.sh
 ```
 
 ## Documentation

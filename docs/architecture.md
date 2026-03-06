@@ -17,25 +17,27 @@ No registry keys are used. The game's `config.json` uses `RomPath=""` which auto
 .
 ├── build.sh                 # Orchestrator (prerequisites + build)
 ├── .env.example             # Build configuration template
-├── scripts/
-│   ├── config.sh            # Shared variables (loaded by other scripts)
-│   ├── fetch.sh             # Download dependencies + ROM
-│   └── package.sh           # Assemble the package
+├── src/
+│   ├── scripts/
+│   │   ├── config.sh        # Shared variables (loaded by other scripts)
+│   │   ├── fetch.sh         # Download dependencies + ROM
+│   │   ├── package.sh       # Assemble the package
+│   │   └── setup.sh         # Check and install required system packages
+│   └── template/            # Package source files (override the PA.c template)
+│       ├── App/AppInfo/
+│       │   ├── appinfo.ini      # Package metadata
+│       │   ├── installer.ini    # Installer config
+│       │   └── Launcher/
+│       │       └── Sonic3AIRPortable.ini  # Launcher config (key file)
+│       ├── Other/Source/
+│       │   ├── Sonic3AIRPortable.ini      # User config template
+│       │   └── Readme.txt                 # End-user documentation
+│       └── help.html            # Help page
 ├── docs/
 │   └── architecture.md      # This file
 ├── resources/               # Downloaded automatically
 │   ├── Sonic 3 A.I.R/      # Game files (without ROM)
 │   └── PortableApps.com_Application_Template_3.9.0/
-├── src/                     # Package source files
-│   ├── App/AppInfo/
-│   │   ├── appinfo.ini      # Package metadata
-│   │   ├── installer.ini    # Installer config
-│   │   └── Launcher/
-│   │       └── Sonic3AIRPortable.ini  # Launcher config (key file)
-│   ├── Other/Source/
-│   │   ├── Sonic3AIRPortable.ini      # User config template
-│   │   └── Readme.txt                 # End-user documentation
-│   └── help.html            # Help page
 └── build/                   # Build output (generated)
     └── Sonic3AIRPortable/   # Ready-to-use portable package
 ```
@@ -44,11 +46,11 @@ No registry keys are used. The game's `config.json` uses `RomPath=""` which auto
 
 | Script                     | Role                                                              |
 | -------------------------- | ----------------------------------------------------------------- |
-| `build.sh`                 | Orchestrator — runs fetch then package                            |
-| `scripts/setup.sh`         | Checks and installs required system packages                      |
-| `scripts/config.sh`        | Shared configuration — loads `.env`, defines all paths and URLs   |
-| `scripts/fetch.sh`         | Downloads template + game if missing, copies ROM from `ROM_PATH`  |
-| `scripts/package.sh`       | Assembles the package from `resources/` and `src/` into `build/`  |
+| `build.sh`                      | Orchestrator — runs fetch then package                               |
+| `src/scripts/setup.sh`          | Checks and installs required system packages                         |
+| `src/scripts/config.sh`         | Shared configuration — loads `.env`, defines all paths and URLs      |
+| `src/scripts/fetch.sh`          | Downloads template + game if missing, copies ROM from `ROM_PATH`     |
+| `src/scripts/package.sh`        | Assembles the package from `resources/` and `src/template/` into `build/` |
 
 `config.sh` is sourced (not executed) by the other two scripts. All variables are defined there.
 
@@ -57,8 +59,8 @@ No registry keys are used. The game's `config.json` uses `RomPath=""` which auto
 | File                                              | Role                                                        |
 | ------------------------------------------------- | ----------------------------------------------------------- |
 | `.env`                                            | Build configuration (ROM path, versions)                    |
-| `src/App/AppInfo/Launcher/Sonic3AIRPortable.ini`  | Portability mechanism — directory moves, cleanup             |
-| `src/App/AppInfo/appinfo.ini`                     | Package metadata (name, category, version, license)         |
+| `src/template/App/AppInfo/Launcher/Sonic3AIRPortable.ini`  | Portability mechanism — directory moves, cleanup             |
+| `src/template/App/AppInfo/appinfo.ini`                     | Package metadata (name, category, version, license)         |
 | `resources/Sonic 3 A.I.R/data/metadata.json`      | Game version source (auto-read at build time)               |
 | `build/Sonic3AIRPortable/App/AppInfo/appinfo.ini` | Built package version (patched from game metadata)          |
 
@@ -89,14 +91,14 @@ grep 'Version=' build/Sonic3AIRPortable/App/AppInfo/appinfo.ini
 
 ## Build steps detail
 
-### `scripts/fetch.sh`
+### `src/scripts/fetch.sh`
 
 1. Download the PortableApps.com template from SourceForge if missing
 2. Download Sonic 3 A.I.R. from GitHub releases if missing
 3. Copy ROM from `ROM_PATH` if set, or warn if missing
 4. Validate that all required directories exist
 
-### `scripts/package.sh`
+### `src/scripts/package.sh`
 
 1. Read game version from `data/metadata.json`
 2. Clean and create `build/Sonic3AIRPortable/`

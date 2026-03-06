@@ -2,13 +2,13 @@
 #
 # config.sh - Shared configuration for all build scripts
 #
-# Usage: source scripts/config.sh
+# Usage: source src/scripts/config.sh
 #
 
 # ── Project root ─────────────────────────────────────────────────────────
-# Resolve from this script's location (scripts/ -> project root)
+# Resolve from this script's location (src/scripts/ -> src/ -> project root)
 SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPTS_DIR/.." && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPTS_DIR/../.." && pwd)"
 
 # ── Load .env overrides ─────────────────────────────────────────────────
 ENV_FILE="$PROJECT_ROOT/.env"
@@ -26,7 +26,7 @@ ROM_PATH="${ROM_PATH:-}"
 
 # ── Derived paths ────────────────────────────────────────────────────────
 RESOURCES="$PROJECT_ROOT/resources"
-SRC="$PROJECT_ROOT/src"
+SRC="$PROJECT_ROOT/src/template"
 BUILD="$PROJECT_ROOT/build/Sonic3AIRPortable"
 
 TEMPLATE_ZIP="$RESOURCES/PortableApps.com_Application_Template_${TEMPLATE_VERSION}.zip"

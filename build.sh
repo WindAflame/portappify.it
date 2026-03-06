@@ -6,7 +6,7 @@
 #
 set -euo pipefail
 
-SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)/scripts"
+SCRIPTS_DIR="$(cd "$(dirname "$0")" && pwd)/src/scripts"
 
 bash "$SCRIPTS_DIR/fetch.sh"
 bash "$SCRIPTS_DIR/package.sh"
