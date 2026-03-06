@@ -6,10 +6,10 @@ Sonic 3 A.I.R. stores its user data (saves, settings, mods) in `%APPDATA%\Sonic3
 
 The PortableApps.com Launcher handles portability by:
 
-1. **On launch** — Moving `Data/Sonic3AIR/` to `%APPDATA%\Sonic3AIR` so the game finds its data where it expects it.
-2. **On exit** — Moving `%APPDATA%\Sonic3AIR` back to `Data/Sonic3AIR/` and cleaning up the empty folder.
+1. **On launch** — Moving `Data/UserData/` to `%APPDATA%\Sonic3AIR` so the game finds its saves/settings where it expects them. Moving `Data/Sonic_Knuckles_wSonic3.bin` to `App/Sonic3AIR/` so the game finds the ROM next to its executable.
+2. **On exit** — Moving both back to `Data/` and cleaning up the empty AppData folder.
 
-No registry keys are used. The game's `config.json` uses `RomPath=""` which auto-detects the ROM relative to the executable, so no path rewriting is needed.
+No registry keys are used. The ROM location is handled by `[FilesMove]`, so no path rewriting in `config.json` is needed.
 
 ## Project structure
 
@@ -59,7 +59,7 @@ No registry keys are used. The game's `config.json` uses `RomPath=""` which auto
 | File                                              | Role                                                        |
 | ------------------------------------------------- | ----------------------------------------------------------- |
 | `.env`                                            | Build configuration (ROM path, versions)                    |
-| `src/template/App/AppInfo/Launcher/Sonic3AIRPortable.ini`  | Portability mechanism — directory moves, cleanup             |
+| `src/template/App/AppInfo/Launcher/Sonic3AIRPortable.ini`  | Portability mechanism — ROM and userdata moves, cleanup      |
 | `src/template/App/AppInfo/appinfo.ini`                     | Package metadata (name, category, version, license)         |
 | `resources/Sonic 3 A.I.R/data/metadata.json`      | Game version source (auto-read at build time)               |
 | `build/Sonic3AIRPortable/App/AppInfo/appinfo.ini` | Built package version (patched from game metadata)          |
@@ -106,13 +106,15 @@ grep 'Version=' build/Sonic3AIRPortable/App/AppInfo/appinfo.ini
 4. Copy game files (excluding `bonus/` — ~23 MB of dev tools not needed to play)
 5. Copy and patch `appinfo.ini` with game version
 6. Copy template icons (placeholders)
-7. Create `DefaultData/Sonic3AIR/` skeleton for first launch
+7. Create `DefaultData/UserData/` skeleton for first launch
 8. Copy help page and Other/ assets
 9. Print summary with versions, ROM status, and size
 
 ## ROM
 
-The ROM (`Sonic_Knuckles_wSonic3.bin`) is separate from the game download. Set `ROM_PATH` in `.env` and the build script copies it automatically. Alternatively, place it directly in `resources/Sonic 3 A.I.R/` or `build/Sonic3AIRPortable/App/Sonic3AIR/`.
+The ROM (`Sonic_Knuckles_wSonic3.bin`) is separate from the game download. Set `ROM_PATH` in `.env` and the build script copies it automatically into `Data/` of the portable package.
+
+The launcher moves it to `App/Sonic3AIR/` at launch (where the game expects it) and moves it back to `Data/` on exit. If the ROM is absent the package still builds, but the game won't start.
 
 Guide: [How to get the ROM (post-delist)](https://docs.google.com/document/d/1oSud8dJHvdfrYbkGCfllAOp3JuTks7z4K5SwtVkXkx0)
 
@@ -125,5 +127,6 @@ Guide: [How to get the ROM (post-delist)](https://docs.google.com/document/d/1oS
 1. Run `build/Sonic3AIRPortable/Sonic3AIRPortable.exe` on Windows
 2. Verify `%APPDATA%\Sonic3AIR` is created while the game runs
 3. Close the game
-4. Verify `Data/Sonic3AIR/` contains the saves and settings
-5. Verify `%APPDATA%\Sonic3AIR` no longer exists
+4. Verify `Data/UserData/` contains the saves and settings
+5. Verify `Data/Sonic_Knuckles_wSonic3.bin` is back in `Data/`
+6. Verify `%APPDATA%\Sonic3AIR` no longer exists

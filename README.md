@@ -12,7 +12,7 @@ The game runs entirely from a USB drive (or any portable folder) without leaving
 cp .env.example .env
 ```
 
-Edit `.env` and set `ROM_PATH` to your Sonic 3 & Knuckles ROM file. The ROM is not included and must be obtained separately — see the [ROM guide](https://docs.google.com/document/d/1oSud8dJHvdfrYbkGCfllAOp3JuTks7z4K5SwtVkXkx0).
+Optionally set `ROM_PATH` in `.env` to your Sonic 3 & Knuckles ROM file. The ROM is not included — see the [ROM guide](https://docs.google.com/document/d/1oSud8dJHvdfrYbkGCfllAOp3JuTks7z4K5SwtVkXkx0). Without it the package still builds, but the game won't start.
 
 ### 2. Build
 
@@ -20,7 +20,7 @@ Edit `.env` and set `ROM_PATH` to your Sonic 3 & Knuckles ROM file. The ROM is n
 bash build.sh
 ```
 
-The script downloads dependencies automatically (game + template) if missing, copies the ROM, and assembles the package into `build/Sonic3AIRPortable/`.
+The script downloads dependencies automatically (game + template) if missing, copies the ROM into `Data/` if provided, and assembles the package into `build/Sonic3AIRPortable/`.
 
 You can also run the steps separately:
 
