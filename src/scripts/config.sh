@@ -36,7 +36,8 @@ TEMPLATE="$TEMPLATE_DIR/AppNamePortable"
 GAME_ZIP="$RESOURCES/sonic3air_game.zip"
 GAME="$RESOURCES/Sonic 3 A.I.R"
 
-ROM_DEST="$GAME/Sonic_Knuckles_wSonic3.bin"
+ROM_FILENAME="Sonic_Knuckles_wSonic3.bin"
+ROM_STAGING="$GAME/$ROM_FILENAME"
 METADATA_FILE="$GAME/data/metadata.json"
 
 # ── URLs ─────────────────────────────────────────────────────────────────

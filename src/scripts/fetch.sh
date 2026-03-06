@@ -48,11 +48,11 @@ else
 fi
 
 # ── ROM ──────────────────────────────────────────────────────────────────
-if [ -f "$ROM_DEST" ]; then
+if [ -f "$ROM_STAGING" ]; then
     echo "==> ROM already present"
 elif [ -n "$ROM_PATH" ] && [ -f "$ROM_PATH" ]; then
     echo "==> Copying ROM from: $ROM_PATH"
-    cp "$ROM_PATH" "$ROM_DEST"
+    cp "$ROM_PATH" "$ROM_STAGING"
 else
     echo ""
     echo "WARNING: ROM file not found!"
@@ -67,7 +67,7 @@ else
     echo "  $ROM_FAQ_URL"
     echo ""
     echo "  Then set ROM_PATH in .env or place the file as:"
-    echo "  $ROM_DEST"
+    echo "  $ROM_STAGING"
     echo ""
 fi
 

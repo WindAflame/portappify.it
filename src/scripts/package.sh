@@ -2,7 +2,7 @@
 #
 # package.sh - Assemble Sonic 3 A.I.R. Portable package
 #
-# Usage: bash scripts/package.sh
+# Usage: bash src/scripts/package.sh
 #
 set -euo pipefail
 
@@ -32,7 +32,7 @@ cp "$TEMPLATE/AppNamePortable.exe" "$BUILD/Sonic3AIRPortable.exe"
 # ── Game files (excluding bonus/) ────────────────────────────────────────
 echo "==> Copying game files (excluding bonus/)..."
 mkdir -p "$BUILD/App/Sonic3AIR"
-rsync -a --exclude='bonus' "$GAME/" "$BUILD/App/Sonic3AIR/"
+rsync -a --exclude='bonus' --exclude="$ROM_FILENAME" "$GAME/" "$BUILD/App/Sonic3AIR/"
 
 # ── AppInfo configs ──────────────────────────────────────────────────────
 echo "==> Copying AppInfo configs..."
@@ -78,8 +78,12 @@ cp "$SRC/Other/Source/Sonic3AIRPortable.ini" "$BUILD/Other/Source/Sonic3AIRPorta
 cp "$TEMPLATE/Other/Source/LauncherLicense.txt" "$BUILD/Other/Source/LauncherLicense.txt"
 cp "$SRC/Other/Source/Readme.txt" "$BUILD/Other/Source/Readme.txt"
 
-# ── Data directory ───────────────────────────────────────────────────────
+# ── Data directory + ROM ─────────────────────────────────────────────────
 mkdir -p "$BUILD/Data"
+if [ -f "$ROM_STAGING" ]; then
+    echo "==> Copying ROM to Data/..."
+    cp "$ROM_STAGING" "$BUILD/Data/$ROM_FILENAME"
+fi
 
 # ── Summary ──────────────────────────────────────────────────────────────
 echo ""
@@ -98,10 +102,10 @@ built_dis_ver=$(grep '^DisplayVersion=' "$BUILD/App/AppInfo/appinfo.ini" | cut -
 echo "  Package (appinfo)  : $built_dis_ver (PackageVersion=$built_pkg_ver)"
 echo ""
 
-if [ -f "$BUILD/App/Sonic3AIR/Sonic_Knuckles_wSonic3.bin" ]; then
-    echo "ROM: included"
+if [ -f "$BUILD/Data/$ROM_FILENAME" ]; then
+    echo "ROM: included (Data/$ROM_FILENAME)"
 else
-    echo "ROM: MISSING (game will not start)"
+    echo "ROM: not included (add it to Data/ before running)"
 fi
 echo ""
 
