@@ -1,6 +1,8 @@
-# PortableApps.com ports
+# PortableApps Portabilizer - Turn apps and games into USB‑ready packages
 
-A collection of applications and games packaged in the [PortableApps.com](https://portableapps.com) format.
+This group provides tools and workflows for creating PortableApps‑compatible packages, including apps and games.
+Mature projects may later be proposed for integration into [PortableApps.com](https://portableapps.com).
+Some tools in this repository are experimental or not intended for public release.
 
 ## Table of Contents
 
